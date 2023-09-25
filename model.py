@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 import optuna
+from torch.nn import functional as F
 
 def suggest_architecture(trial):
   """
@@ -79,4 +80,4 @@ class MLP(nn.Module):
     Returns:
         torch.Tensor: Output predictions of shape (batch_size, num_classes).
     """
-    return self.model(data.view(-1,28*28))
+    return F.log_softmax(self.model(data.view(-1,28*28)))
