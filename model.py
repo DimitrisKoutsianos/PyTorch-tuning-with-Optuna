@@ -30,24 +30,25 @@ def suggest_architecture(trial):
     study.optimize(objective, n_trials=100)
     ```
   """
-  n_layers = trial.suggest_int("n_layers", 1, 5)
-  layers = []
-  input_shape = 28*28
+
+  n_layers = trial.suggest_int("n_layers", 1, 5)    #the number of layers the MLP will have
+  layers = []    #a list where we will append the layers of the MLP
+  input_shape = 28*28    #since our images are 28x28 (HxW), the input shape will be 28*28 (H*W)
   for i in range(n_layers):
-      output_shape = trial.suggest_categorical(f"Layer_{i+1}", [2 ** i for i in range(5, 10)])
-      layers.append(nn.Linear(input_shape, output_shape))
-      act = trial.suggest_categorical(f"Activation_{i+1}", ["ReLU", "SiLU"])
-      layers.append(getattr(nn, act)())
-      drop = trial.suggest_categorical(f"Dropout_{i+1}", [0,1])
-      if drop == 1:
-        layers.append(nn.Dropout(trial.suggest_categorical(f"Dropout_rate_{i+1}", [0.1,0.15,0.2,0.25,0.3,0.4,0.5])))
+      output_shape = trial.suggest_categorical(f"Layer_{i+1}", [2 ** i for i in range(5, 10)])    #the output shape of each layer
+      layers.append(nn.Linear(input_shape, output_shape))    #appending the Linear layer to the layers list
+      act = trial.suggest_categorical(f"Activation_{i+1}", ["ReLU", "SiLU"])    #the activation function of each layer
+      layers.append(getattr(nn, act)())    #appending the activation function
+      drop = trial.suggest_categorical(f"Dropout_{i+1}", [0,1])    #deciding if we should add a dropout layer or not
+      if drop == 1:   
+        layers.append(nn.Dropout(trial.suggest_categorical(f"Dropout_rate_{i+1}", [0.1,0.15,0.2,0.25,0.3,0.4,0.5])))    #adding a dropout layer 
 
-      batchnorm = trial.suggest_categorical(f"BatchNorm_{i+1}", [0,1])
+      batchnorm = trial.suggest_categorical(f"BatchNorm_{i+1}", [0,1])  #deciding if we should add a Batch Normalization layer or not
       if batchnorm == 1:
-        layers.append(nn.BatchNorm1d(output_shape))
-      input_shape = output_shape
+        layers.append(nn.BatchNorm1d(output_shape))    #adding a Batch Normalization layer
+      input_shape = output_shape    #turning the output shape to input shape so that the next Linear layer accepts the correct input shape
 
-  layers.append(nn.Linear(output_shape, 10))
+  layers.append(nn.Linear(output_shape, 10))    #adding a final Linear layer with 10 output nodes, one for each of our classes
   return layers
 
 class MLP(nn.Module):
