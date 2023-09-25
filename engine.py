@@ -128,13 +128,6 @@ def train(model, train_loader, val_loader, optimizer, reduce_lr, loss_fn, epochs
     best_val_acc = train(model, train_loader, val_loader, optimizer, reduce_lr, loss_fn, epochs, device, trial)
     ```
   """
-  results = {"train_loss": [],
-             "train_acc": [],
-             "train_f1": [],
-             "val_loss": [],
-             "val_acc": [],
-             "val_f1": [],
-             "best_val_acc": 0}
 
   early_stopping = EarlyStopper(mode = "maximize")
   f1_fn = F1Score("multiclass", num_classes = 10).to(device)
