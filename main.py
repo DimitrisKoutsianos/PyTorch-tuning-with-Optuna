@@ -56,7 +56,6 @@ def objective(trial):
   ))
 
   optimizer = torch.optim.Adam(model.parameters(), lr = lr)
-  #early_stopping = EarlyStopper(mode = "maximize")
   reduce_lr = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, "max",
                                                          verbose = True,
                                                          patience = 5,
