@@ -105,4 +105,4 @@ test_loss, test_acc, test_f1 = engine.test_step(model = model,
                                   loss_fn = loss_fn,
                                   f1_fn = f1_fn,
                                   device = device)
-print(f"test loss: {test_loss}, test accuracy: {test_acc*100:.2f}%, test f1: {test_f1*100:.2f}%")
+print(f"Test Loss: {test_loss}, Test Accuracy: {test_acc*100:.2f}%, Test F1: {test_f1*100:.2f}%")
